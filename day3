@@ -1,0 +1,105 @@
+203.删除节点
+
+添加dummy head 避免处理删除头节点的情况。由于删除节点需要将前一个和后一个节点连起来，所以枚举的都是前一个节点
+   
+   def removeElements(self, head: Optional[ListNode], val: int) -> Optional[ListNode]:
+        dummy = ListNode(-1)
+        dummy.next = head
+        temp = dummy
+
+        while temp.next:
+            if temp.next.val == val:
+                temp.next = temp.next.next
+            else:
+                temp = temp.next
+        return dummy.next
+   
+206.反转链表
+
+需要记录某一节点的上一个和下一个节点 ，所以用prev temp两个指针。
+        
+    public ListNode reverseList(ListNode head) {
+        ListNode prev = null, temp = null;
+        ListNode curr = head;
+        while(curr != null){
+            temp = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = temp;
+        }
+        return prev;
+    }
+    
+    
+707.设计链表
+
+为什么使用双链表，这样可以根据需要取得的数据的index来双向遍历，永远可以从距离较短的那一边出发
+
+
+class Node:
+    def __init__(self, _val):
+        self.val = _val
+        self.prev = None
+        self.next = None
+
+class MyLinkedList:
+    def __init__(self):
+        self.he = Node(-1)
+        self.ta = Node(-1)
+        self.he.next = self.ta
+        self.ta.prev = self.he
+        self.sz = 0
+
+    def get(self, index: int) -> int:
+        node = self.getNode(index)
+        return node.val if node else -1
+
+    def addAtHead(self, val: int) -> None:
+        node = Node(val)
+        node.next = self.he.next
+        node.prev = self.he
+        self.he.next.prev = node
+        self.he.next = node
+        self.sz += 1
+
+    def addAtTail(self, val: int) -> None:
+        node = Node(val)
+        node.prev = self.ta.prev
+        node.next = self.ta
+        self.ta.prev.next = node
+        self.ta.prev = node
+        self.sz += 1
+
+    def addAtIndex(self, index: int, val: int) -> None:
+        if index > self.sz:
+            return 
+        if index <= 0:
+            self.addAtHead(val)
+        elif index == self.sz:
+            self.addAtTail(val)
+        else:
+            node, cur = Node(val), self.getNode(index)
+            node.next = cur
+            node.prev = cur.prev
+            cur.prev.next = node
+            cur.prev = node
+            self.sz += 1
+
+    def deleteAtIndex(self, index: int) -> None:
+        node = self.getNode(index)
+        if node:
+            node.prev.next = node.next
+            node.next.prev = node.prev
+            self.sz -= 1
+
+    def getNode(self, index: int) -> Node | None:
+        isLeft = index < self.sz / 2
+        if not isLeft:
+            index = self.sz - index - 1
+        cur = self.he.next if isLeft else self.ta.prev
+        while cur != self.he and cur != self.ta:
+            if index == 0:
+                return cur
+            index -= 1
+            cur = cur.next if isLeft else cur.prev
+        return None
