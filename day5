@@ -1,0 +1,95 @@
+242.有效字母异位词
+
+public boolean isAnagram(String s, String t) {
+        Map<Character, Integer> counts = new HashMap<>();
+        for(char c: s.toCharArray()){
+            counts.put(c, counts.getOrDefault(c, 0) + 1);
+        }
+
+        for(char c: t.toCharArray()){
+            Integer count = counts.get(c);
+            if(count == null){
+                return false;
+            } else if(count >1){
+                counts.put(c, count -1);
+            } else{
+                counts.remove(c);
+            }
+        }
+        return counts.isEmpty();
+    }
+    
+    
+    
+349.数组的交集
+
+    public int[] intersection(int[] nums1, int[] nums2) {
+        Set<Integer> s1 = new HashSet<Integer>();
+        Set<Integer> ans = new HashSet<Integer>();
+        for(int num : nums1){
+            s1.add(num);
+        }
+        for(int num: nums2){
+            if(s1.contains(num)){
+                ans.add(num);
+            }
+        }
+
+        int[] arr = new int[ans.size()];
+        int j = 0;
+        for(int i : ans){
+            arr[j++] = i;
+        }
+        
+        return arr;
+    }
+    
+   //优化只用1000个counter
+   def intersection(self, nums1: List[int], nums2: List[int]) -> List[int]:
+        arr = [0] * 1001
+        for num in nums1:
+            arr[num] = 1
+        ans = []
+        for num in nums2:
+            if arr[num] == 1:
+                ans.append(num)
+                arr[num] += 1
+        return ans
+        
+        
+202.快乐数
+
+    private int getNext(int n){
+        int totalSum = 0;
+        while(n>0){
+            int d = n %10;
+            n=n/10;
+            totalSum += d *d;
+        }
+        return totalSum;
+    }
+    
+    public boolean isHappy(int n) {
+        Set<Integer> seen = new HashSet<>();
+        while(n!= 1 && !seen.contains(n)){
+            seen.add(n);
+            n = getNext(n);
+        }
+        return n == 1;
+    }
+    
+    
+    
+两数之和
+
+    public int[] twoSum(int[] nums, int target) {
+       Map<Integer, Integer> occurences = new HashMap<Integer, Integer>();
+
+       for(int i = 0; i< nums.length;i++){
+           if(occurences.containsKey(target - nums[i])){
+               return new int[]{occurences.get(target - nums[i]), i};
+           }
+           occurences.put(nums[i],i);
+       }
+       return new int[0];
+    }
