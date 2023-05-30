@@ -1,0 +1,119 @@
+454.四数相加2
+
+先处理ab，在处理cd，时间复杂度控制在n**n
+ 
+ def fourSumCount(self, nums1: List[int], nums2: List[int], nums3: List[int], nums4: List[int]) -> int:
+      m = {}
+      for num1 in nums1:
+          for num2 in nums2:
+              if num1+num2 in m.keys():
+                  m[num1+num2] += 1
+              else:
+                  m[num1+num2] = 1
+
+      res = 0
+
+      for num3 in nums3:
+          for num4 in nums4:
+              s = num3+num4
+              if 0-s in m.keys():
+                  res += m[0-s]
+      return res
+      
+      
+383 赎金信
+
+    public boolean canConstruct(String ransomNote, String magazine) {
+        if (ransomNote.length() > magazine.length()) {
+            return false;
+        }
+        int[] cnt = new int[26];
+        for (char c : magazine.toCharArray()) {
+            cnt[c - 'a']++;
+        }
+        for (char c : ransomNote.toCharArray()) {
+            cnt[c - 'a']--;
+            if(cnt[c - 'a'] < 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    
+    
+    
+15. 三数之和
+    public List<List<Integer>> threeSum(int[] nums) {
+        //思路：排序 + 双指针
+        List<List<Integer>> ans = new ArrayList<>();
+        Arrays.sort(nums);//排序
+        int n = nums.length;
+        //枚举 a
+        for (int first = 0; first < n; first++){
+            //因为已排序，所以当第一个数大于0时，三数之和一定大于0，跳出循环
+            if (nums[first] > 0) break;
+            //对 a 去重
+            if (first > 0 && nums[first] == nums[first - 1]){
+                continue;
+            }
+            //定义 c 的起始位置
+            int third = n - 1;
+            //设 target = -a
+            int target = -nums[first];
+            //枚举 b
+            for (int second = first + 1; second < n; second++){
+                //对 b 去重
+                if (second > first + 1 && nums[second] == nums[second - 1]){
+                    continue;
+                }
+                //保证 b 的指针在 c 的指针的左侧
+                //当 b + c 大于 a 的相反数时，则 c 左移，往小的数移动
+                while (second < third && nums[second] + nums[third] > target){
+                    --third;
+                }
+                // 如果指针重合，随着 b 后续的增加
+                // 就不会有满足 a+b+c=0 并且 b<c 的 c 了，可以退出循环
+                if (second == third){
+                    break;
+                }
+                // b + c = -a 满足条件，返回结果
+                if (nums[second] + nums[third] == target){
+                    ans.add(Arrays.asList(nums[first],nums[second],nums[third]));
+                }
+            }
+        }
+        return ans;
+    }
+    
+    
+18. 四数之和
+
+public List<List<Integer>> fourSum(int[] nums, int target) {
+        List<List<Integer>> result = new ArrayList<>();
+        Arrays.sort(nums);
+        for(int i = 0;i< nums.length;i++){
+            if(nums[i]>0 && nums[i] > target) return result;
+            if(i>0 && nums[i-1] == nums[i]) continue;
+
+            for(int j = i+1;j<nums.length;j++){
+                if(j>i+1 && nums[j-1] == nums[j]) continue;
+                int left = j+1;
+                int right = nums.length -1;
+
+                while(right > left){
+                    long sum = (long) nums[i] + nums[j] + nums[left] + nums[right];
+                    if(sum > target) right--;
+                    else if(sum < target) left++;
+                    else{
+                        result.add(Arrays.asList(nums[i], nums[j], nums[left], nums[right]));
+                        while(right> left&& nums[right] == nums[right -1]) right--;
+                        while(right> left&& nums[left] == nums[left+1]) left++;
+                        left++;
+                        right--;
+                    }
+                } 
+            }
+        }
+        return result;
+    }
