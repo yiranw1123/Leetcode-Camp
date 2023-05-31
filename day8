@@ -1,0 +1,126 @@
+344.反转字符串
+
+双指针，用temp来记录当前的值以便swap
+
+    public void reverseString(char[] s) {
+        int left = 0, right = s.length -1;
+        while(left < right){
+            char temp = s[left];
+            s[left] = s[right];
+            s[right] = temp;
+            left++;
+            right--;
+        }
+    }
+    
+541.反转字符串2
+
+    public String reverseStr(String s, int k) {
+        char[] arr = s.toCharArray();
+        int n = arr.length;
+        for(int l= 0;l<n;l = l+2*k){
+            int r = l+k-1;
+            reverse(arr, l, Math.min(r, n-1));
+        }
+        return String.valueOf(arr);
+    }
+    private void reverse(char[] cs, int l, int r){
+        while(l<r){
+            char c = cs[l];
+            cs[l] =cs[r];
+            cs[r] = c;
+            l++;
+            r--;
+        }
+    }
+    
+剑指05- 替换空格
+
+    public String replaceSpace(String s) {
+        int len = s.length();
+        char[] array = new char[len*3];
+        int size = 0;
+        for(int i=0;i<len;i++){
+            if(s.charAt(i) == ' '){
+                array[size] = '%';
+                array[size+1] = '2';
+                array[size+2] = '0';
+                size = size+3;
+            } else{
+                array[size] = s.charAt(i);
+                size++;
+            }
+        }
+
+        String newStr = new String(array, 0, size);
+        return newStr;
+    }
+    
+    
+151.翻转字符串中的单词
+
+    def trim_spaces(self, s:str) -> str:
+        start = 0
+        end = len(s) -1
+        while start<=end and s[start]==' ':
+            start+=1
+        while start<=end and s[end]==' ':
+            end -=1
+        tmp=[]
+        while start<=end:
+            if s[start]!=' ':
+                tmp.append(s[start])
+            elif tmp[-1]!=' ':                                 
+                tmp.append(s[start])
+            start+=1
+        return tmp
+
+    def reverseString(self, arr, left:int, right: int) -> str:
+        while left<right:
+            arr[left], arr[right]=arr[right],arr[left]
+            left+=1
+            right-=1
+        return None
+
+    def reverseEachWord(self, arr: list):
+        start=0
+        end=0
+        n=len(arr)
+        while start<n:
+            while end<n and arr[end]!=' ':
+                end+=1
+            self.reverseString(arr,start,end-1)
+            start=end+1
+            end+=1
+        return None
+
+    def reverseWords(self, s: str) -> str:
+        l = self.trim_spaces(s)                     
+        self.reverseString( l,  0, len(l) - 1)
+        self.reverseEachWord(l)
+        return ''.join(l)
+        
+剑指58 - 左旋转字符串
+用库函数最快
+    def reverseLeftWords(self, s: str, n: int) -> str:
+        return s[n: len(s)] + s[0: n]
+
+考点-不用额外空间
+
+    public String reverseLeftWords(String s, int n) {
+        char[] chars = s.toCharArray();
+        reverse(chars, 0, chars.length - 1);
+        reverse(chars, 0, chars.length - 1 - n);
+        reverse(chars, chars.length - n, chars.length - 1);
+        return new String(chars);
+    }
+
+    public void reverse(char[] chars, int left, int right) {
+        while (left < right) {
+            chars[left] ^= chars[right];
+            chars[right] ^= chars[left];
+            chars[left] ^= chars[right];
+            left++;
+            right--;
+        }
+    }
