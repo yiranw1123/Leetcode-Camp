@@ -1,0 +1,74 @@
+28.实现strstr
+
+KMP使用前缀表来记录某个index之前最长匹配的前缀和后缀的长度（next数组），优化暴力匹配 O(n^2)到线性时间复杂度 O(m+n).
+
+前缀是不包括最后一个字符，后缀不包括第一个字符的连续字串。
+
+KMP算法一般分为两个步骤：创建next数组和匹配。
+
+next数组的实现，可以把前缀表统一减去1（初始位置为-1），也可以直接使用前缀表。前缀表记录了在当前index之前的子串中，最长相同的前缀和后缀。
+
+
+    public void getNext(int[] next, String s){
+         //初始位置为-1
+        int j = -1;
+        next[0] = -1;
+        for(int i = 1;i<s.length();i++){
+            while(j>=0 && s.charAt(i) != s.charAt(j+1)){
+                j = next[j];
+            }
+            if(s.charAt(i) == s.charAt(j+1)){
+                j++;
+            }
+            next[i] = j;
+        }
+    }
+    public int strStr(String haystack, String needle) {
+        if(needle.length() == 0) return 0;
+        int[] next = new int[needle.length()];
+        getNext(next, needle);
+        int j = -1;
+        for(int i = 0;i<haystack.length();i++){
+            while(j>=0 && haystack.charAt(i) != needle.charAt(j+1)){
+                j = next[j];
+            }
+            if(haystack.charAt(i) == needle.charAt(j+1)){
+                j++;
+            }
+            if(j == needle.length() -1){
+                return (i - needle.length()+1);
+            }
+        }
+        return -1;
+    }
+    
+    如果next数组不从-1开始，j=next[j-1]
+    
+    
+    459.重复子串
+    判断一个字符串能否通过重复某一个子串来得到。
+    
+    把字符串前面pad一个空格，这样j可以从零开始，next用的是 前缀表 - 1 （看上一题原来的kmp imp j是从-1开始的）
+    
+      public boolean repeatedSubstringPattern(String s) {
+        if(s.equals("")) return false;
+        int len = s.length();
+        s = " " + s;
+        char[] chars = s.toCharArray();
+        int[] next = new int[len+1];
+
+        for(int i = 2, j = 0;i<=len;i++){
+            while(j>0 && chars[i] !=chars[j+1]) j = next[j];
+            if(chars[i] == chars[j+1])j++;
+            next[i] = j;
+        }
+        // kmp得到的是最长重复前后缀的长度，len - next[len]得到的是一个周期的长度
+        // 如果这个长度可以被len整除，说明字符串可以通过重复一个周期来得到
+        if(next[len] > 0 && len % (len - next[len]) ==0){
+            return true;
+        }
+        return false;
+    }
+
+
+
