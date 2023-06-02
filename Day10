@@ -1,0 +1,80 @@
+20.有效的括号
+
+三种不匹配情况
+1. 左括号多了，不匹配    循环结束了， 栈不为空
+2. 开合括号不匹配 当前位置上的括号和栈顶的括号不匹
+3. 右括号多了，不匹配 栈已空，没有做括号匹配当前的括号
+
+
+    def isValid(self, s):
+        """
+        :type s: str
+        :rtype: bool
+        """
+        if len(s) % 2 == 1:
+            return False
+        
+        pairs = {
+            ")": "(",
+            "]": "[",
+            "}": "{",
+        }
+        stack = list()
+        for ch in s:
+            if ch in pairs:
+                if not stack or stack[-1] != pairs[ch]:
+                    return False
+                stack.pop()
+            else:
+                stack.append(ch)
+        
+        return not stack
+
+
+1047.删除字符串中所有相邻的重复项
+
+
+    public String removeDuplicates(String s) {
+        Stack<Character> stack = new Stack<>();
+        for(int i = 0;i <s.length(); i++){
+            char c = s.charAt(i);
+            if(stack.empty() || c != stack.peek()){
+                stack.push(c);
+            } else{
+                stack.pop();
+            }
+        }
+        String str = "";
+        for(int i = 0;i< stack.size();i++){
+            str += stack.get(i);
+        }
+        return str;
+    }
+    
+150.逆波兰表达式求值
+
+
+    public int evalRPN(String[] tokens) {
+        int n = tokens.length;
+        Stack<Integer> stack = new Stack<>();
+        Set<String> operators = new HashSet<>(Arrays.asList("+", "-", "*", "/"));
+        for(int i = 0;i<n;i++){
+            if(operators.contains(tokens[i])){
+                String op = tokens[i];
+                int num1 = stack.pop();w w w w w w w w w
+                int num2 = stack.pop();
+                if(op.equals("+")){
+                    stack.push(num1 + num2);
+                }else if(op.equals("-")){
+                    stack.push(num2 - num1);
+                } else if(op.equals("*")){
+                    stack.push(num1 * num2);
+                } else if(op.equals("/")){
+                    stack.push(num2/num1);
+                }
+            } else{
+                stack.push(Integer.parseInt(tokens[i]));
+            }
+        }
+        return stack.peek();
+    }
