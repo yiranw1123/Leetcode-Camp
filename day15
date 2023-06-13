@@ -162,3 +162,26 @@ java queue api 需要熟悉
         }
         return root;
     }
+    
+   二叉树最大深度
+   public int maxDepth(TreeNode root) {
+        if(root == null) return 0;
+        int left = maxDepth(root.left);
+        int right = maxDepth(root.right);
+        return Math.max(left, right) + 1;
+    }
+  
+   二叉树最小深度 
+   public int minDepth(TreeNode root) {
+        if(root == null) return 0;
+        int left = minDepth(root.left);
+        int right = minDepth(root.right);
+        //如果左子树为空，右子树不为空，说明最小深度是 1 + 右子树的深度
+        if(root.left == null){
+            return 1 +right;
+        } else if(root.right == null){
+            return 1 + left;
+        } else{
+            return 1 + Math.min(right, left);
+        }
+    }
