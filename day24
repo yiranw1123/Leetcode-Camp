@@ -1,0 +1,25 @@
+回溯的本质是穷举
+组合不强调元素的顺序，排列强调
+
+
+77 组合
+
+    List<List<Integer>> res = new ArrayList<>();
+    LinkedList<Integer> curr = new LinkedList<>();
+    public List<List<Integer>> combine(int n, int k) {
+        backtracking(1, n, k);
+        return res;
+    }
+    public void backtracking(int start, int n, int k){
+        if(curr.size() == k){
+            //需要转换成arraylist
+            res.add(new ArrayList<>(curr));
+            return;
+        }
+                          // 剪枝优化
+        for(int i =start; i<=n - (k -curr.size()) + 1; i++){
+            curr.add(i);
+            backtracking(i+1, n, k);
+            curr.removeLast();
+        }
+    }
