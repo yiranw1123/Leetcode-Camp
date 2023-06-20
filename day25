@@ -1,0 +1,59 @@
+    
+    216 组合总和3
+    
+    List<List<Integer>> res = new ArrayList<>();
+    LinkedList<Integer> curr = new LinkedList<>();
+
+    public List<List<Integer>> combinationSum3(int k, int n) {
+        backtracking(k, n, 1, 0);
+        return res;
+    }
+    public void backtracking(int k, int n, int start, int currSum){
+        if(currSum > n) return;
+        if(curr.size() == k){
+            if(currSum == n){
+                res.add(new ArrayList<>(curr));
+            }
+            return;
+        }
+        
+        
+        
+        //一共九个数字，剩余需要选择的 k - curr.size() +1 -> 选择当前的数字 
+        for(int i = start; i<= 9 - (k - curr.size()) + 1;i++){
+            currSum+= i;
+            curr.add(i);
+            backtracking(k,n,i+1, currSum);
+            currSum -= i;
+            curr.removeLast();
+        }
+    }
+    
+    17.电话号码字母组合
+    
+    String[] mapping = new String[] {
+        "","","abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"
+    };
+    List<String> res = new LinkedList<>();
+    
+    public List<String> letterCombinations(String digits) {
+        if(digits.isEmpty()) return res;
+        backtrack(digits, 0, new StringBuilder());
+        return res;
+    }
+
+    private void backtrack(String digits, int start, StringBuilder sb){
+        if(sb.length() == digits.length()){
+            res.add(sb.toString());
+            return;
+        }
+
+        for(int i = start;i<digits.length();i++){
+            int digit = digits.charAt(i) -'0';
+            for(char c: mapping[digit].toCharArray()){
+                sb.append(c);
+                backtrack(digits, i+1, sb);
+                sb.deleteCharAt(sb.length()-1);
+            }
+        }
+    }
