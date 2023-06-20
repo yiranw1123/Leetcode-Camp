@@ -1,0 +1,26 @@
+    39.组合总和
+    
+    
+    List<List<Integer>> res = new ArrayList<>();
+    LinkedList<Integer> curr = new LinkedList<>();
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        Arrays.sort(candidates);
+        backtracking(0,target,0, candidates);
+        return res;
+    }
+
+    public void backtracking(int startIndex, int target, int currSum, int[] candidates){
+        if(currSum == target){
+            res.add(new ArrayList<>(curr));
+            return;
+        }
+        for(int i = startIndex;i<candidates.length;i++){
+            if(currSum + candidates[i] > target) break;
+            currSum += candidates[i];
+            curr.add(candidates[i]);
+            backtracking(i, target, currSum, candidates);
+            currSum -= candidates[i];
+            curr.removeLast();
+
+        }
+    }
