@@ -59,3 +59,30 @@
             curr.removeLast();
         }
     }
+
+90.子集2
+
+    List<List<Integer>> res = new ArrayList<>();
+    LinkedList<Integer> curr = new LinkedList<>();
+    boolean[] used;
+    public List<List<Integer>> subsetsWithDup(int[] nums) {
+        used = new boolean[nums.length];
+        Arrays.fill(used, false);
+        Arrays.sort(nums);
+        backtracking(nums, 0);
+        return res;
+    }
+    private void backtracking(int[] nums, int startIndex){
+        res.add(new ArrayList<>(curr));
+
+        for(int i = startIndex;i<nums.length;i++){
+            if(i >0 && nums[i-1] == nums[i] && !used[i-1]) continue;
+            else{
+                curr.add(nums[i]);
+                used[i] = true;
+                backtracking(nums, i+1);
+                curr.removeLast();
+                used[i] = false;
+            }
+        }
+    }
