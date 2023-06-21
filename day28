@@ -38,3 +38,24 @@
         }
         return true;
     }
+
+
+78 子集
+
+    List<List<Integer>> res = new ArrayList<>();
+    LinkedList<Integer> curr = new LinkedList<>(); 
+    public List<List<Integer>> subsets(int[] nums) {
+        backtracking(nums, 0);
+        return res;
+    }
+    private void backtracking(int[] nums, int startIndex){
+        res.add(new ArrayList<>(curr));
+        
+        //终止条件省略了
+        
+        for(int i = startIndex;i<nums.length;i++){
+            curr.add(nums[i]);
+            backtracking(nums, i+1);
+            curr.removeLast();
+        }
+    }
