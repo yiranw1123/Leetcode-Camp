@@ -24,3 +24,36 @@
 
         }
     }
+    
+    40.组合总和2
+    
+    用used array记录元素是否使用过，注意使用全局变量来减少参数数量
+    
+    List<List<Integer>> res = new ArrayList<>();
+    LinkedList<Integer> curr = new LinkedList<>();
+    boolean[] used;
+    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        Arrays.sort(candidates);
+        used= new boolean[candidates.length];
+        Arrays.fill(used, false);
+        backtracking(candidates, target, 0, 0);
+        return res;
+    }
+    public void backtracking(int[] candidates, int target, int startIndex, int currSum){
+        if(currSum == target){
+            res.add(new ArrayList<>(curr));
+            return;
+        }
+        for(int i = startIndex;i<candidates.length;i++){
+            if (currSum + candidates[i] > target) break;
+            if(i>0 && candidates[i] == candidates[i-1] && !used[i-1]) continue;
+            used[i] = true;
+            currSum += candidates[i];
+            curr.add(candidates[i]);
+            backtracking(candidates, target, i+1, currSum);
+            currSum -= candidates[i];
+            used[i] = false;
+            curr.removeLast();
+        }
+
+    }
