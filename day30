@@ -32,3 +32,55 @@
       }
       return false;
   }
+  
+51. N queens  
+  
+    List<List<String>> res = new ArrayList<>();
+    public List<List<String>> solveNQueens(int n) {
+    // create board with n rows and cols
+        char[][] board = new char[n][n];
+        for(char[] c: board){
+            Arrays.fill(c, '.');
+        }
+    // call backtrack
+        backtrack(board, 0, n);
+        return res;
+    }
+    private void backtrack(char[][] board, int r, int n){
+        if(r == n){
+            res.add(arraytoList(board));
+            return;
+        }
+
+        for(int c = 0;c<n;c++){
+            if(isValid(r, c, n, board)){
+                board[r][c] = 'Q';
+                backtrack(board, r+1, n);
+                board[r][c] = '.';
+            }
+        }
+    }
+
+    private List arraytoList(char[][] board){
+        List<String> list = new ArrayList<>();
+        for(char[] r: board){
+            list.add(String.copyValueOf(r));
+        }
+        return list;
+    }
+    private boolean isValid(int r, int c, int n, char[][] board) {
+        // 排除法:这里不用考虑行是否存在Q,因为dfs逻辑决定同一条路径同一行只会放一位皇后
+        // 考虑同一列[0,r-1]
+        for (int i = 0; i < r; i++) {
+            if(board[i][c] == 'Q') return false;
+        }
+        // 考虑两条斜边:左上->右下+右上+左下
+        for (int i = r - 1, j = c - 1; i >= 0 && j >= 0; i--, j--) {
+            if(board[i][j] == 'Q') return false;
+        }
+        for (int i = r - 1, j = c + 1; i >= 0 && j <= n - 1; i--, j++) {
+            if(board[i][j] == 'Q') return false;
+        }
+        // 排出后就是true
+        return true;
+    }
