@@ -1,0 +1,50 @@
+122. 买卖股票2
+
+一只股票，求买卖的最大收益
+
+贪心- 把利润分解为每天为单位的维度，第一天当然没有利润，至少要第二天才会有利润，所以利润的序列比股票序列少一天！
+需要收集每天的正利润就可以，收集正利润的区间，就是股票买卖的区间，而我们只需要关注最终利润，不需要记录区间。
+
+
+    public int maxProfit(int[] prices) {
+        int result = 0;
+        for(int i = 1;i<prices.length;i++){
+            result += Math.max(prices[i] - prices[i-1], 0);
+        }
+        return result;
+    }
+
+跳跃游戏
+
+检查能覆盖的最大范围能不能达到i，不能的话return false
+
+    public boolean canJump(int[] nums) {
+        int n = nums.length;
+        int farthest = 0;
+        for(int i = 0;i< n-1;i++){
+            farthest = Math.max(farthest, i+ nums[i]);
+            if(farthest <= i) return false;
+        }
+        return farthest >= n - 1;
+    }
+
+
+跳跃游戏2
+
+
+
+    public int jump(int[] nums) {
+        int n = nums.length;
+        int cur =0, farthest =0;
+        int jumps = 0;
+        for(int i =0;i<n-1;i++){
+            farthest = Math.max(nums[i] + i, farthest);
+            //如果当前位置是终点了，增加jump
+            if(cur ==i){
+                //当i = nums.length -2 时，如果 end == i，则jump+1 需要再一个jump才能到达终点。
+                jumps++;
+                cur = farthest;
+            }
+        }
+        return jumps;
+    }
