@@ -25,3 +25,44 @@ public int largestSumAfterKNegations(int[] nums, int k) {
         } 
         return Arrays.stream(nums).sum();
     }
+
+加油站
+
+  累加rest[i]， 当rest[i] < 0 ，起点则为i+1 
+
+    public int canCompleteCircuit(int[] gas, int[] cost) {
+        int n = gas.length;
+        int sum = 0, minSum = 0;
+        int start = 0;
+
+        for(int i = 0;i<n;i++){
+            sum += gas[i] - cost[i];
+            if(sum < minSum){
+                start = i+1;
+                minSum = sum;
+            }
+        }
+        if(sum <0) return -1;
+        return start ==n ? 0 : start;
+    }
+
+分发糖果
+
+    public int candy(int[] ratings) {
+        int len = ratings.length;
+        int[] res = new int[len];
+        res[0] = 1;
+
+        for(int i = 1;i<len;i++){
+            res[i] = (ratings[i] > ratings[i-1]) ? res[i-1]+ 1 : 1;
+        }
+
+        for(int i = len-2;i>=0;i--){
+            if(ratings[i] > ratings[i+1]){
+                res[i] = Math.max(res[i+1]+ 1, res[i]);
+            }
+        }
+        int ans = 0;
+        for(int i = 0;i<len;i++) ans += res[i];
+        return ans;
+    }
