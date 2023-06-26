@@ -47,7 +47,7 @@ public int largestSumAfterKNegations(int[] nums, int k) {
     }
 
 分发糖果
-
+  要从前往后和从后往前两次比较元素和其左右两边元素的大小
     public int candy(int[] ratings) {
         int len = ratings.length;
         int[] res = new int[len];
