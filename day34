@@ -1,0 +1,27 @@
+
+k次反转后数组最大和
+
+  贪心思路- 将元素按绝对值大小从大到小排列，优先翻转绝对值最大的负数
+  如果负数用尽了，则剩余次数用来反转绝对值最小的正数
+  优化- 根据剩余k的奇偶性来决定是否要反转最小正数的值来避免while循环
+
+public int largestSumAfterKNegations(int[] nums, int k) {
+        //将数组按绝对值从大到小排列
+        nums = IntStream.of(nums)
+                .boxed()
+                .sorted((o1, o2) -> Math.abs(o2) -  Math.abs(o1))
+                .mapToInt(Integer::intValue).toArray();
+        int len = nums.length;
+        for(int i = 0;i<len;i++){
+            if(nums[i] < 0 && k > 0){
+                nums[i] = -nums[i];
+                k--;
+            }
+        }
+        //如果剩余k为奇数，则翻转最小元素
+        //为偶数时反转过后元素大小不变
+        if(k % 2 == 1){
+            nums[len-1] = -nums[len-1];
+        } 
+        return Arrays.stream(nums).sum();
+    }
