@@ -1,0 +1,55 @@
+单调递增的数字
+
+  从后往前，保证修改过的数字时单调递增的
+  
+
+
+public int monotoneIncreasingDigits(int n) {
+        String s = String.valueOf(n);
+        char[] chars = s.toCharArray();
+        int start = s.length();
+
+        for(int i = s.length() -2;i>=0;i--){
+            if(chars[i] >chars[i+1]){
+                System.out.println(chars[i] + " " + start);
+                chars[i]--;
+                start = i+1;
+            }
+        }
+
+        for(int i = start;i<s.length();i++){
+            chars[i] = '9';
+        }
+        return Integer.parseInt(String.valueOf(chars));
+    }
+
+
+968.监控二叉树的最小摄像头数量
+
+
+int res = 0;
+    public int minCameraCover(TreeNode root) {
+        if(traverse(root) == 0){
+            res++;
+        }
+        return res;
+    }
+    // 0 - 无覆盖
+    // 1 - 有摄像头
+    // 2 - 有覆盖
+    public int traverse(TreeNode root){
+        //空节点默认为有覆盖状态，以免在叶子节点上放置摄像头（不是局部optimal）
+        if(root == null) return 2;
+
+        int left = traverse(root.left);
+        int right = traverse(root.right);
+
+        if(left == 2 && right == 2) return 0;
+        else if(left == 0 || right == 0) {
+            res++;
+            return 1;
+        } else{
+            //(1,1),(1,2),(2,1),左右至少有一个摄像头，返回2
+            return 2;
+        }
+    }
