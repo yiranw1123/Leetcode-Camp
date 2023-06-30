@@ -1,6 +1,5 @@
 Fib
 
-
 public int fib(int n) {
         if(n < 2) return n;
         int a = 0;
@@ -14,4 +13,58 @@ public int fib(int n) {
         }
         return c;
 
+}
+
+爬楼梯
+
+    public int climbStairs(int n) {
+        if(n == 1 || n == 2){return n;}
+        int[] dp = new int[n+1];
+        dp[1] = 1;
+        dp[2] = 2;
+        for(int i = 3; i< dp.length;i++){
+            dp[i] = dp[i-1] + dp[i-2];
+        }
+        return dp[n];
+    }
+
+最小花费爬楼梯
+
+    public int minCostClimbingStairs(int[] cost) {
+        int[] dp = new int[cost.length+1];
+        for(int i = 2;i<=cost.length;i++){
+            dp[i] = Math.min(dp[i-1] +cost[i-1], dp[i-2]+cost[i-2]);
+        }
+        return dp[cost.length];
+    }
+
+不同路径
+
+    public int uniquePaths(int m, int n) {
+        int[][] dp = new int[m][n];
+        for(int i = 0;i<m;i++) dp[i][0] = 1;
+        for(int i = 0;i<n;i++) dp[0][i] = 1;
+        for(int i = 1;i<m;i++){
+            for(int j = 1;j<n;j++){
+                dp[i][j] = dp[i-1][j] + dp[i][j-1];
+            }
+        }
+        return dp[m-1][n-1];
+    }
+
+不同路径2
+
+    public int uniquePathsWithObstacles(int[][] obstacleGrid) {
+        int m = obstacleGrid.length;
+        int n = obstacleGrid[0].length;
+        int[][] dp = new int[m][n];
+        if(obstacleGrid[m-1][n-1] ==1 || obstacleGrid[0][0] ==1) return 0;
+        for(int i = 0;i<m && obstacleGrid[i][0] == 0;i++) dp[i][0] = 1;
+        for(int i = 0;i<n && obstacleGrid[0][i] == 0;i++) dp[0][i] = 1;
+        for(int i = 1;i<m;i++){
+            for(int j = 1;j<n;j++){
+                 dp[i][j] = (obstacleGrid[i][j] == 0) ? dp[i-1][j] + dp[i][j-1]: 0;
+            }
+        }
+        return dp[m-1][n-1];
     }
