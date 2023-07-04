@@ -71,3 +71,46 @@
         }
         return sum - dp[target] *2;
     }
+
+
+
+494.目标和
+
+//用物品0 -j的物品装满容量为i的背包的总方法数
+    public int findTargetSumWays(int[] nums, int target) {
+        int sum = 0;
+        for(int n: nums) sum += n;
+        if(sum < Math.abs(target) || (sum + target) % 2 == 1) return 0;
+        return subsets(nums, (sum+target) /2);
+    }
+    private int subsets(int[] nums, int target){
+        int[][] dp = new int[nums.length+1][target+1];
+        dp[0][0] = 1;
+        for(int i = 1;i<=nums.length;i++){
+            for(int j = 0;j<=target;j++){
+                if(nums[i-1] <= j){
+                    dp[i][j] = dp[i-1][j-nums[i-1]] + dp[i-1][j];
+                } else{
+                    dp[i][j] = dp[i-1][j];
+                }
+            }
+        }
+        return dp[nums.length][target];
+    }
+
+
+//装满容量为i的书包有多少种方法
+    public int findTargetSumWays(int[] nums, int target) {
+        int sum = 0;
+        for(int n: nums) sum += n;
+        int total = (sum + target) / 2;
+        if(sum < Math.abs(target) || (sum + target) % 2 == 1) return 0;
+        int[] dp = new int[total+1];
+        dp[0] = 1;
+        for(int i = 0;i<nums.length;i++){
+            for(int j = total;j>=nums[i];j--){
+                dp[j] += dp[j-nums[i]];
+            }
+        }
+        return dp[total];
+    }
