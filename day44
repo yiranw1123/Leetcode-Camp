@@ -1,0 +1,47 @@
+518.零钱兑换2
+
+public int change(int amount, int[] coins) {
+        int n = coins.length;
+        int[][] dp = new int[n][amount+1];
+        //只用一种硬币的情况
+        for(int i = 0;i<=amount;i+=coins[0]){
+            dp[0][i] = 1;
+        }
+
+        for(int i = 1;i<coins.length;i++){
+            for(int j = 0;j<=amount;j++){
+                for(int k = 0;k*coins[i]<=j;k++){
+                    dp[i][j] += dp[i-1][j - k * coins[i]];
+                }
+            }
+        }
+        return dp[n-1][amount];
+    }
+
+    public int change(int amount, int[] coins) {
+        int[] dp = new int[amount+1];
+        dp[0] = 1;
+
+        for(int i = 0;i<coins.length;i++){
+            for(int j = coins[i];j<=amount;j++){
+                dp[j] += dp[j - coins[i]];
+            }
+        }
+        return dp[amount];
+    }
+
+
+组合总和4
+
+    //容量为target的背包，放入nums种物品，求可以装满容量为target背包的方案总数
+    int[] dp = new int[target+1];
+
+    dp[0] = 1;
+    for(int i = 1;i<target+1;i++){
+        for(int j =0;j< nums.length;j++){
+            if(nums[j] <= i){
+                dp[i] += dp[i - nums[j]];
+            }
+        }
+    }
+    return dp[target];
