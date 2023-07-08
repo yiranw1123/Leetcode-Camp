@@ -1,0 +1,62 @@
+一步一个台阶，两个台阶，三个台阶，.......，直到 m个台阶。问有多少种不同的方法可以爬到楼顶呢？
+
+public int climbStairs(int n) {
+        int[] dp = new int[n + 1];
+        int m = 2;
+        dp[0] = 1;
+
+        for (int i = 1; i <= n; i++) { // 遍历背包
+            for (int j = 1; j <= m; j++) { //遍历物品
+                if (i >= j) dp[i] += dp[i - j];
+            }
+        }
+
+        return dp[n];
+}
+
+coin change
+    public int coinChange(int[] coins, int amount) {
+        int n = coins.length;
+        int inf = (int)0x3f3f3f;
+        int[][] dp = new int[n+1][amount+1];
+        for(int i =1;i<=amount;i++){
+            dp[0][i] = inf;
+        }
+        for(int i = 1;i<=n;i++){
+            int v = coins[i-1];
+            for(int j = 1;j<=amount;j++){
+                dp[i][j] = dp[i-1][j];
+                for(int k = 0;k* v <= j;k++){
+                    if(dp[i-1][j - k * v] != inf){
+                        dp[i][j] = Math.min(dp[i][j], dp[i-1][j - k * v] + k);
+                    }
+                }
+            }
+        }
+        // System.out.println(dp.length);
+        // System.out.println(dp[0].length);
+        // for(int i = 0;i<dp.length;i++){
+        //     StringBuilder sb = new StringBuilder();
+        //     for(int j = 0;j<dp[0].length;j++){
+        //         sb.append(dp[i][j]);
+        //         sb.append(',');
+        //     }
+        //     System.out.println(sb.toString());
+        // }
+        return dp[n][amount] == inf ? -1 : dp[n][amount];
+    }
+
+
+
+    public int numSquares(int n) {
+        int[] dp = new int[n+1];
+        Arrays.fill(dp, n);
+        dp[0] = 0;
+        for(int t = 1;t*t<=n;t++){
+            int x = t*t;
+            for (int j = x;j<=n;j++){
+                dp[j] = Math.min(dp[j], dp[j - x]+1);
+            }
+        }
+        return dp[n];
+    }
