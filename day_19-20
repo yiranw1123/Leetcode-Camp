@@ -1,0 +1,93 @@
+700. 二叉搜索树中的搜索
+
+public TreeNode searchBST(TreeNode root, int val) {
+        if(root == null) return null;
+        if(root.val < val) return searchBST(root.right, val);
+        else if(root.val > val) return searchBST(root.left, val);
+        else return root;
+}
+
+
+**[654. 最大二叉树](https://leetcode.cn/problems/maximum-binary-tree/)**
+
+给定一个不重复的整数数组 nums 。 最大二叉树 可以用下面的算法从 nums 递归地构建:
+
+创建一个根节点，其值为 nums 中的最大值。
+递归地在最大值 左边 的 子数组前缀上 构建左子树。
+递归地在最大值 右边 的 子数组后缀上 构建右子树。
+返回 nums 构建的 最大二叉树 。
+
+
+class Solution {
+    public TreeNode constructMaximumBinaryTree(int[] nums) {
+        return traverse(nums, 0, nums.length);
+    }
+    public TreeNode traverse(int[] nums, int begin, int end){
+        if(begin >= end) return null;
+        int max = Integer.MIN_VALUE;
+        int maxIdx = -1;
+        for(int i = begin;i<end;i++){
+            if(nums[i] >max){
+                max = nums[i];
+                maxIdx = i;
+            }
+        }
+        TreeNode root = new TreeNode(nums[maxIdx]);
+        root.left = traverse(nums, begin, maxIdx);
+        root.right = traverse(nums, maxIdx+1, end);
+        return root;
+
+    }
+}
+
+**[617. 合并二叉树](https://leetcode.cn/problems/merge-two-binary-trees/)**
+
+public TreeNode mergeTrees(TreeNode root1, TreeNode root2) {
+        if(root1 == null) return root2;
+        if(root2 == null) return root1;
+        int sum = root1.val + root2.val;
+        TreeNode newNode = new TreeNode(sum);
+        newNode.left = mergeTrees(root1.left, root2.left);
+        newNode.right = mergeTrees(root1.right, root2.right);
+        return newNode;
+}
+
+**[98. 验证二叉搜索树](https://leetcode.cn/problems/validate-binary-search-tree/)**
+
+验证二叉搜索树 - 左孩子要比左子树里所有的元素大，右孩子要比右子树所有元素小
+
+中序遍历中判断节点的有序性
+
+class Solution {
+    TreeNode max;
+    public boolean isValidBST(TreeNode root) {
+        if(root == null) return true;
+        boolean left = isValidBST(root.left);
+        if(!left) return false;
+        if(max != null && root.val <= max.val){return false;}
+        max = root;
+        boolean right = isValidBST(root.right);
+        return right;
+
+    }
+}
+530二叉搜索树最小差值
+class Solution {
+    TreeNode pre;
+    int min = Integer.MAX_VALUE;
+    public int getMinimumDifference(TreeNode root) {
+        if(root == null) return 0;
+        traverse(root);
+        return min;
+    }
+    private void traverse(TreeNode root){
+        if(root == null) return;
+        traverse(root.left);
+        if(pre != null){
+            min = Math.min(min, root.val - pre.val);
+        }
+        pre = root;
+        traverse(root.right);
+    }
+}
+```
