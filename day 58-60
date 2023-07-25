@@ -1,0 +1,149 @@
+**[739. 每日温度](https://leetcode.cn/problems/daily-temperatures/)**
+
+找到下一个气温更高的日子是过几天
+
+```java
+class Solution {
+    public int[] dailyTemperatures(int[] temperatures) {
+        Deque<Integer> q = new LinkedList<>();
+        int[] res = new int[temperatures.length];
+        int n = temperatures.length;
+        q.offerFirst(0);
+        for(int i = 1;i<n;i++){
+            while(!q.isEmpty() && temperatures[i] > temperatures[q.peek()]){
+                res[q.peek()] = i - q.peek();
+                q.pop();
+            }
+            q.push(i);
+        }
+        return res;
+    }
+}
+```
+
+**[496.](https://leetcode.cn/problems/next-greater-element-i/) 下一个更大元素**
+
+对于nums1里的所有元素，找到其在nums2中对应元素，再向后找第一个比它大的元素，若没有则返回-1
+
+```java
+public int[] nextGreaterElement(int[] nums1, int[] nums2) {
+      Deque<Integer> s = new LinkedList<>();
+      int[] res = new int[nums1.length];
+      Arrays.fill(res, -1);
+      HashMap<Integer, Integer> map = new HashMap<>();
+      for(int i = 0;i<nums1.length;i++){
+          map.put(nums1[i], i);
+      }
+
+      s.addFirst(0);
+      for(int i = 1;i<nums2.length;i++){
+          if(nums2[i] <= nums2[s.peek()]){
+              s.addFirst(i);
+          } else{
+              while(!s.isEmpty() && nums2[s.peek()] < nums2[i]){
+                  if(map.containsKey(nums2[s.peek()])){
+                      Integer index = map.get(nums2[s.peek()]);
+                      res[index] = nums2[i];
+                  }
+                  s.pop();
+              }
+              s.add(i);
+          }
+      }
+      return res;
+}
+```
+
+ii 环形数组
+
+```java
+    public int[] nextGreaterElements(int[] nums) {
+        //边界判断
+        if(nums == null || nums.length <= 1) {
+            return new int[]{-1};
+        }
+        int size = nums.length;
+        int[] result = new int[size];//存放结果
+        Arrays.fill(result,-1);//默认全部初始化为-1
+        Stack<Integer> st= new Stack<>();//栈中存放的是nums中的元素下标
+        for(int i = 0; i < 2*size; i++) {
+            while(!st.empty() && nums[i % size] > nums[st.peek()]) {
+                result[st.peek()] = nums[i % size];//更新result
+                st.pop();//弹出栈顶
+            }
+            st.push(i % size);
+        }
+        return result;
+    }
+```
+
+**[84. 柱状图中最大的矩形](https://leetcode.cn/problems/largest-rectangle-in-histogram/)**
+
+遍历每个柱状图的高度， 用单调栈维护一个单调递增的栈（确保每个柱子的左边比他小的第一个柱子已经找到）。当当前柱子高度小于栈顶柱子高度时可以更新答案出栈。
+
+```java
+class Solution {
+    public int largestRectangleArea(int[] heights) {
+        int n = heights.length;
+        Deque<Integer> s = new LinkedList<>();
+        int[] l = new int[n];
+        int[] r = new int[n];
+
+        Arrays.fill(l, -1);
+        Arrays.fill(r, n);
+
+        for(int i = 0;i<n;i++){
+            while(!s.isEmpty() && heights[i] < heights[s.peek()]){
+                r[s.pollFirst()] = i;
+            }
+            s.addFirst(i);
+        }
+
+        s.clear();
+
+        for(int i = n-1;i>=0;i--){
+            while(!s.isEmpty() && heights[i] < heights[s.peek()]){
+                l[s.pollFirst()] = i;
+            }
+            s.addFirst(i);
+        }
+
+        int ans = 0;
+
+        for(int i = 0;i<n;i++){
+            int left = l[i], right = r[i], height = heights[i];
+            ans = Math.max(ans, (right - left - 1) * height);
+        }
+        return ans;
+    }
+}
+```
+
+Trapping rain water
+
+```java
+class Solution {
+    public int trap(int[] height) {
+        Stack<Integer> stack = new Stack<>();
+        int res = 0;
+        // 遍历每个柱体
+        for (int i = 0; i < height.length; i++) {
+           while (!stack.isEmpty() && height[stack.peek()] < height[i]) {
+                int bottomIdx = stack.pop();
+                // 如果栈顶元素一直相等，那么全都pop出去，只留第一个。
+                while (!stack.isEmpty() && height[stack.peek()] == height[bottomIdx]) {
+                    stack.pop();
+                }
+                if (!stack.isEmpty()) {
+                    // stack.peek()是此次接住的雨水的左边界的位置，右边界是当前的柱体，即i。
+                    // Math.min(height[stack.peek()], height[i]) 是左右柱子高度的min，减去height[bottomIdx]就是雨水的高度。
+                    // i - stack.peek() - 1 是雨水的宽度。
+                    res += (Math.min(height[stack.peek()], height[i]) - height[bottomIdx]) * (i - stack.peek() - 1);
+                }
+            }
+            stack.push(i);
+        }
+        return res;
+    }
+}
+```
